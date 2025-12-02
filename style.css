@@ -1,0 +1,134 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const startButton = document.getElementById('startButton');
+    const diceResult = document.getElementById('dice-result');
+    const board = document.getElementById('board');
+
+    const PLAYERS = ['red', 'blue', 'yellow', 'green', 'purple', 'orange'];
+    let currentPlayerIndex = 0;
+    let gameActive = false;
+    let piecePositions = {
+        'red': 0, 'blue': 0, 'yellow': 0, 
+        'green': 0, 'purple': 0, 'orange': 0
+    };
+    
+    // Simulación de las coordenadas del tablero (debes ajustar esto para que coincida con tu imagen)
+    // NOTA: Estas son coordenadas genéricas. Si la ficha no se alinea, necesitarás ajustarlas.
+    const PATH_COORDS = [];
+    // Rellenar con coordenadas simuladas (57 posiciones + 1 de casa)
+    for (let i = 0; i <= 57; i++) {
+        PATH_COORDS.push({ 
+            left: 50 + (i % 10) * 50, // Posición Left simulada
+            top: 50 + Math.floor(i / 10) * 50 // Posición Top simulada
+        });
+    }
+
+    // Crea las fichas visualmente
+    function createPieces() {
+        PLAYERS.forEach(player => {
+            const piece = document.createElement('div');
+            piece.id = `${player}-piece`;
+            piece.classList.add('piece', `piece-${player}`);
+            
+            // Posición inicial (la primera coordenada simulada)
+            piece.style.left = `${PATH_COORDS[0].left}px`;
+            piece.style.top = `${PATH_COORDS[0].top}px`;
+            
+            board.appendChild(piece);
+        });
+    }
+
+    // Función para simular el dado animado y el resultado
+    function rollDice() {
+        diceResult.textContent = 'Lanzando...';
+        // Simulación de la animación del dado
+        const result = Math.floor(Math.random() * 6) + 1;
+        
+        // Aquí es donde tú activas el sonido de dado en TikTok Studio (MANUALMENTE).
+        
+        setTimeout(() => {
+            diceResult.textContent = result;
+            movePiece(result);
+        }, 1500); // 1.5 segundos para la animación del dado
+    }
+
+    // Función que mueve la ficha automáticamente
+    function movePiece(diceNumber) {
+        const player = PLAYERS[currentPlayerIndex];
+        const piece = document.getElementById(`${player}-piece`);
+        let currentPos = piecePositions[player];
+        let newPos = currentPos + diceNumber;
+        
+        // La lógica de movimiento es automática (Opción 1 - Rápido)
+        let step = 1;
+        
+        // Función recursiva para animar paso a paso
+        function animateStep() {
+            if (step <= diceNumber) {
+                const stepPos = currentPos + step;
+                
+                if (stepPos < PATH_COORDS.length) {
+                    // Mueve la ficha a la nueva posición
+                    piece.style.left = `${PATH_COORDS[stepPos].left}px`;
+                    piece.style.top = `${PATH_COORDS[stepPos].top}px`;
+                }
+                
+                // Aquí es donde tú activas el sonido de avance en TikTok Studio (MANUALMENTE).
+
+                step++;
+                setTimeout(animateStep, 300); // 300ms por casilla
+            } else {
+                // El movimiento terminó, actualiza la posición final
+                piecePositions[player] = newPos;
+
+                // Espera 0.5s para la transición antes de pasar el turno
+                setTimeout(() => {
+                    // Regla especial: si entra a su color (posición final)...
+                    if (newPos >= 57) { // 57 es la posición final simulada
+                        diceResult.textContent = `${player.toUpperCase()} ENTRÓ!`;
+                        gameActive = false;
+                        startButton.textContent = 'REINICIAR JUEGO';
+                        startButton.disabled = false;
+                        return;
+                    }
+
+                    // Pasa el turno al siguiente jugador (Modo Rápido)
+                    currentPlayerIndex = (currentPlayerIndex + 1) % PLAYERS.length;
+                    if (gameActive) {
+                        rollDice();
+                    }
+                }, 500);
+            }
+        }
+        
+        animateStep();
+    }
+
+    // Función de inicio de partida
+    function startGame() {
+        startButton.disabled = true;
+        gameActive = true;
+        diceResult.textContent = '¡Empieza el juego!';
+        
+        // Aquí es donde tú activas el sonido de inicio épico en TikTok Studio (MANUALMENTE).
+        
+        // Simular la animación de inicio (3 segundos)
+        setTimeout(() => {
+            // Comienza el primer turno
+            rollDice(); 
+        }, 3000); 
+    }
+
+    startButton.addEventListener('click', () => {
+        if (!gameActive) {
+            // Reinicia la posición y empieza
+            piecePositions = {'red': 0, 'blue': 0, 'yellow': 0, 'green': 0, 'purple': 0, 'orange': 0};
+            currentPlayerIndex = 0;
+            // Ocultar el botón para que las fichas se muestren si es necesario
+            startButton.style.display = 'none'; 
+            startGame();
+        }
+    });
+    
+    // Inicializa las fichas al cargar la página
+    createPieces();
+});
