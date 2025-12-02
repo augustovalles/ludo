@@ -1,0 +1,83 @@
+:root {
+    --red: #f44336;
+    --blue: #2196f3;
+    --yellow: #ffeb3b;
+    --green: #4caf50;
+    --purple: #9c27b0;
+    --orange: #ff9800;
+    --bg-color: #2c2c3e; /* Fondo oscuro como en el video */
+}
+
+body {
+    width: 720px;
+    height: 1280px;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#game-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#board {
+    width: 600px;
+    height: 600px;
+    border: 5px solid #fff;
+    position: relative;
+    /* Usamos tu imagen de tablero */
+    background-image: url('img/board_6players.png'); 
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.piece {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease-in-out;
+    z-index: 10;
+}
+/* Estilos para que las fichas tengan el color de cada jugador */
+.piece-red { background-color: var(--red); }
+.piece-blue { background-color: var(--blue); }
+.piece-yellow { background-color: var(--yellow); }
+.piece-green { background-color: var(--green); }
+.piece-purple { background-color: var(--purple); }
+.piece-orange { background-color: var(--orange); }
+
+
+#startButton {
+    padding: 15px 40px;
+    font-size: 24px;
+    background-color: #e50914; /* Rojo llamativo */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px #a0070e;
+    transition: background-color 0.1s;
+}
+
+#dice-display {
+    font-size: 40px;
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#dice-animation {
+    font-size: 80px;
+}
